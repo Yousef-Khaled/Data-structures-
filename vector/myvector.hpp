@@ -140,4 +140,4 @@ void mvector<type>::resize(int SIZ) {
 		siz = SIZ;
 	}
 }
-// not finishef yet
+// not finished yet
