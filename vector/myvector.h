@@ -35,7 +35,7 @@ public:
 
 	void push_front(type data); //done
 	void push_back(type data); //done
-	void insert(type data, int index) throw (out_of_range);
+	void insert(type data, int index) throw (out_of_range); //done
 
 	type pop_front() throw (out_of_range); //done
 	type pop_back() throw (out_of_range); //done
