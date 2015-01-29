@@ -253,3 +253,41 @@ mvector<type> & mvector<type>::operator =(mvector<type> &other) {
 		vec[i] = other.vec[i];
 	return *this;
 }
+template<class type>
+void mvector<type>::insert(type data, int index) throw (out_of_range) {
+	out_of_range s("out of range");
+
+	if (index < 0 || index > siz) {
+		throw s;
+	}
+	if (siz < cap) {
+		for (int i = index; i < siz; i++) {
+			type temp = vec[i];
+			vec[i] = vec[i + 1];
+			vec[i + 1] = temp;
+		}
+		vec[index] = data;
+		siz++;
+	}
+	if (siz == cap) {
+		siz++;
+		cap *= 2;
+		int it = 0;
+		type * temp = new type[siz];
+		for (int i = 0; i < siz - 1; i++) {
+			if (i != index) {
+				temp[i] = vec[it];
+				it++;
+
+			}
+		}
+		temp[index] = data;
+		delete[] vec;
+		vec = new type[siz];
+		for (int i = 0; i < siz; i++)
+			vec[i] = temp[i];
+
+		delete[] temp;
+	}
+
+}
