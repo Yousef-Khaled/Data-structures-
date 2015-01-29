@@ -26,6 +26,8 @@ mvector<type>::mvector(int SIZ, type data) {
 template<class type>
 mvector<type>::mvector(mvector<type> & other) {
 	siz = other.siz;
+	cap = other.cap;
+	vec = new type[cap];
 	for (int i = 0; i < siz; i++)
 		vec[i] = other.vec[i];
 }
@@ -47,16 +49,20 @@ bool mvector<type>::empty() {
 }
 template<class type>
 type* mvector<type>::begin() {
-	if (!siz)
+	if (!siz) {
 		cout << "Vector is empty ()" << endl;
-	else
-		return &vec[0];
+		return 0;
+	} else {
+		type* p = &vec[0];
+		return p;
+	}
 }
 template<class type>
 type* mvector<type>::end() {
-	if (!siz)
+	if (!siz) {
 		cout << "Vector is empty ()" << endl;
-	else
+		return 0;
+	} else
 		return vec + siz;
 }
 template<class type>
@@ -124,6 +130,7 @@ void mvector<type>::shrink_to_fit() {
 }
 template<class type>
 void mvector<type>::resize(int SIZ) {
+
 	if (SIZ <= cap) {
 		siz = SIZ;
 	} else {
@@ -140,4 +147,109 @@ void mvector<type>::resize(int SIZ) {
 		siz = SIZ;
 	}
 }
-// not finished yet
+template<class type>
+void mvector<type>::clear() {
+	siz = 0;
+}
+template<class type>
+int mvector<type>::find(type target) {
+	for (int i = 0; i < siz; i++) {
+		if (vec[i] == target)
+			return i;
+	}
+	return -1;
+}
+template<class type>
+void mvector<type>::swap(mvector<type> &other) {
+
+	type *temp = new type[other.siz];
+	int SIZ = other.siz;
+
+	for (int i = 0; i < other.siz; i++)
+		temp[i] = other.vec[i];
+
+	delete[] other.vec;
+
+	other.vec = new type[siz];
+
+	other.siz = siz;
+
+	for (int i = 0; i < siz; i++)
+		other.vec[i] = vec[i];
+
+	delete[] vec;
+
+	siz = SIZ;
+
+	vec = new type[siz];
+
+	for (int i = 0; i < siz; i++)
+		vec[i] = temp[i];
+
+	delete[] temp;
+}
+template<class type>
+type mvector<type>::pop_back() throw (out_of_range) {
+	out_of_range s("out of range vector is empty!");
+
+	if (!siz)
+		throw s;
+	else {
+		siz--;
+		return vec[siz];
+	}
+}
+template<class type>
+type mvector<type>::pop_front() throw (out_of_range) {
+	out_of_range s("out of range vector is empty!");
+
+	if (!siz)
+		throw s;
+	else {
+		for (int i = 0; i < siz - 1; i++) {
+			type temp = vec[i];
+			vec[i] = vec[i + 1];
+			vec[i + 1] = temp;
+		}
+		siz--;
+		return vec[siz];
+	}
+}
+template<class type>
+type mvector<type>::erase(int index) throw (out_of_range) {
+	out_of_range s("Wrong index");
+
+	if (index < 0 || index >= siz)
+		throw s;
+	else {
+		for (int i = index; i < siz - 1; i++) {
+			type temp = vec[i];
+			vec[i] = vec[i + 1];
+			vec[i + 1] = temp;
+		}
+		siz--;
+		return vec[siz];
+	}
+
+}
+template<class type>
+type& mvector<type>::operator [](int index) throw (out_of_range) {
+	out_of_range s("Wrong index");
+
+	if (index < 0 || index >= siz)
+		throw s;
+	else {
+		return vec[index];
+	}
+
+}
+template<class type>
+mvector<type> & mvector<type>::operator =(mvector<type> &other) {
+	delete[] vec;
+	siz = other.siz;
+	cap = other.cap;
+	vec = new type[cap];
+	for (int i = 0; i < siz; i++)
+		vec[i] = other.vec[i];
+	return *this ;
+}
