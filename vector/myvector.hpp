@@ -251,5 +251,5 @@ mvector<type> & mvector<type>::operator =(mvector<type> &other) {
 	vec = new type[cap];
 	for (int i = 0; i < siz; i++)
 		vec[i] = other.vec[i];
-	return *this ;
+	return *this;
 }
